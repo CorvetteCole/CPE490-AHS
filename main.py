@@ -83,7 +83,7 @@ def calculate_weights(comparison_matrices, indent=0):
         comparison_matrices[criteria]['consistency_index'] = consistency_index
         comparison_matrices[criteria]['consistency_ratio'] = consistency_ratio
 
-        print(f'{"  "*indent}{criteria} CI: {consistency_index}, CR: {consistency_ratio}')
+        print(f'{"  "*indent}{criteria} CI: {np.real_if_close(consistency_index):.2f}, CR: {np.real_if_close(consistency_ratio):.2f}')
 
         if 'subcriteria' in comparison_matrices[criteria]:
             calculate_weights(comparison_matrices[criteria]['subcriteria'], indent + 1)
@@ -119,5 +119,5 @@ if __name__ == "__main__":
     # (the red fonts highlight the mistake). How does the ranking change? Is it possible to spot this
     # mistake BEFORE computing the ranking?
     geometric_ranking, eigenvalue_ranking = calculate_ranking(comparison_matrices['goal'])
-    print(f'Geometric ranking: {geometric_ranking}')
-    print(f'Eigenvalue ranking: {eigenvalue_ranking}')
+    print(f'Geometric ranking: {np.real_if_close(geometric_ranking)}')
+    print(f'Eigenvalue ranking: {np.real_if_close(eigenvalue_ranking)}')
