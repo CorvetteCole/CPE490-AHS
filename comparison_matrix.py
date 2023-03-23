@@ -5,19 +5,22 @@ from typing import List
 random_index = [0, 0, 0.52, 0.89, 1.11, 1.25, 1.35, 1.4, 1.45, 1.49, 1.52]
 
 
-def normalize_geometric(matrix) -> numpy.ndarray:
+def normalize_geometric(matrix: numpy.matrix) -> numpy.ndarray:
     """
     Compute normalized weights based on Geometric Mean method
 
     :return: the normalized weight vector
     """
-    column_sum = numpy.tile(numpy.sum(matrix, 0), [matrix.shape[0], 1])
-    normalized_matrix = numpy.divide(matrix, column_sum)
-    geometric_weight = numpy.prod(normalized_matrix, 1) ** (1.0 / matrix.shape[1])
+    # convert the above code to use numpy.matrix instead of nested numpy.ndarray
+    column_sum = numpy.sum(matrix, 0)
+    normalized_matrix = matrix / column_sum
+
+    geometric_weight = numpy.prod(normalized_matrix, 1).A1 ** (1.0 / matrix.shape[1])
+
     return geometric_weight / numpy.sum(geometric_weight)
 
 
-def normalize_eigen(matrix) -> numpy.ndarray:
+def normalize_eigen(matrix: numpy.matrix) -> numpy.ndarray:
     """
     Compute normalized weights based on Eigen method
 
@@ -27,7 +30,7 @@ def normalize_eigen(matrix) -> numpy.ndarray:
     # get max eigenvalue and corresponding eigenvector
     max_eigenvalue_index = numpy.argmax(eigenvalues)
     # where max_eigenvector is the eigenvector corresponding to the maximum eigenvalue
-    max_eigenvector = normalized_eigenvectors[:, max_eigenvalue_index]
+    max_eigenvector = normalized_eigenvectors[:, max_eigenvalue_index].A1
     return max_eigenvector / numpy.sum(max_eigenvector)
 
 
@@ -41,14 +44,14 @@ def calculate_consistency(matrix, normalized_eigen):
 class ComparisonMatrix:
     # list of self
     _subcriteria: List['ComparisonMatrix'] = []
-    _matrix: numpy.ndarray
+    _matrix: numpy.matrix
 
     _normalized_geometric: numpy.ndarray
     _normalized_eigen: numpy.ndarray
     _consistency_index: float
     _consistency_ratio: float
 
-    def __init__(self, name: str, matrix: numpy.ndarray, subcriteria: List['ComparisonMatrix'] = None):
+    def __init__(self, name: str, matrix: numpy.matrix, subcriteria: List['ComparisonMatrix'] = None):
         self.name = name
         self.matrix = matrix
         self.subcriteria = subcriteria
@@ -80,19 +83,19 @@ class ComparisonMatrix:
         self._recalculate_weights()
 
     @property
-    def matrix(self) -> numpy.ndarray:
+    def matrix(self) -> numpy.matrix:
         """ :return: a copy of the matrix, so that it can't be modified """
         return copy.deepcopy(self._matrix)
 
     @matrix.setter
-    def matrix(self, value: numpy.ndarray):
+    def matrix(self, value: numpy.matrix):
         """
         :param value: a numpy.ndarray
         :raises: ValueError if value is not a numpy.ndarray
         """
 
-        if not isinstance(value, numpy.ndarray):
-            raise ValueError('matrix must be a numpy.ndarray')
+        if not isinstance(value, numpy.matrix):
+            raise ValueError('matrix must be a numpy.matrix')
 
         self._matrix = value
         self._recalculate_weights()
@@ -145,8 +148,8 @@ class ComparisonMatrix:
 
     def get_ranking_str(self):
         # round to 2 floating points for each value in numpy arrays
-        geometric_rounded = numpy.round(numpy.real_if_close(self.ranking_geometric), 2)
-        eigen_rounded = numpy.round(numpy.real_if_close(self.ranking_eigen), 2)
+        geometric_rounded = numpy.round(numpy.real_if_close(self.ranking_geometric), 8)
+        eigen_rounded = numpy.round(numpy.real_if_close(self.ranking_eigen), 8)
         string_representation = f'{self.name} | Geometric: {geometric_rounded} Eigen: {eigen_rounded}\n'
         if self.has_subcriteria:
             for subcriteria in self.subcriteria:
