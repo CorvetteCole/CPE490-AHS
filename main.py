@@ -2,127 +2,61 @@ import numpy
 from comparison_matrix import ComparisonMatrix
 
 if __name__ == "__main__":
-    # legacy data structure:
-    # comparison_matrices = {
-    #     'goal': {
-    #         'matrix': np.array(
-    #             [[1, 5 / 7, 1 / 5, 5 / 9, 1 / 8], [7 / 5, 1, 5 / 9, 5 / 7, 4 / 5], [5, 9 / 5, 1, 7 / 3, 4 / 3],
-    #              [9 / 5, 7 / 5, 3 / 7, 1, 9 / 7], [8, 5 / 4, 3 / 4, 7 / 9, 1]]),
-    #         'subcriteria': {
-    #             'cost': {
-    #                 'matrix': np.array([[1, 1 / 7, 1 / 8], [7, 1, 1 / 3], [8, 3, 1]]),
-    #                 'subcriteria': {
-    #                     'purchase_price': {
-    #                         'matrix': np.array(
-    #                             [[1, 5 / 7, 9 / 4, 5 / 4], [7 / 5, 1, 7 / 6, 6 / 7], [4 / 9, 6 / 7, 1, 2 / 3],
-    #                              [4 / 5, 7 / 6, 3 / 2, 1]])
-    #                     },
-    #                     'fuel_cost': {
-    #                         'matrix': np.array(
-    #                             [[1, 3 / 7, 5 / 9, 1 / 2], [7 / 3, 1, 5 / 8, 5 / 8], [9 / 5, 8 / 5, 1, 1 / 2],
-    #                              [2, 8 / 5, 2, 1]])
-    #                     },
-    #                     'maintenance_cost': {
-    #                         'matrix': np.array([[1, 5 / 7, 3 / 4, 9 / 5], [7 / 5, 1, 1 / 2, 5 / 6], [4 / 3, 2, 1, 2 / 3],
-    #                                             [5 / 9, 6 / 5, 3 / 2, 1]])
-    #                     },
-    #                 }
-    #             },
-    #             'capacity': {
-    #                 'matrix': np.array([[1, 1 / 3], [3, 1]]),
-    #                 'subcriteria': {
-    #                     'trunk_size': {
-    #                         'matrix': np.array([[1, 5 / 6, 3 / 2, 2 / 5], [6 / 5, 1, 9 / 5, 5 / 7], [2 / 3, 5 / 9, 1, 1],
-    #                                             [5 / 2, 7 / 5, 1, 1]])
-    #                     },
-    #                     'passenger_capacity': {
-    #                         'matrix': np.array(
-    #                             [[1, 1 / 9, 1 / 9, 8 / 3], [9, 1, 3 / 2, 9], [9, 2 / 3, 1, 9], [3 / 8, 1 / 9, 1 / 9, 1]])
-    #                     },
-    #                 }
-    #             },
-    #             'design': {
-    #                 'matrix': np.array(
-    #                     [[1, 9, 9, 9], [1 / 9, 1, 1 / 5, 8 / 9], [1 / 9, 5, 1, 9 / 7], [1 / 9, 9 / 8, 7 / 9, 1]]),
-    #             },
-    #             'safety': {
-    #                 'matrix': np.array(
-    #                     [[1, 5 / 2, 9, 7], [2 / 5, 1, 9, 4], [1 / 9, 1 / 9, 1, 1 / 5], [1 / 7, 1 / 4, 5, 1]]),
-    #             },
-    #             'warranty': {
-    #                 'matrix': np.array(
-    #                     [[1, 1 / 9, 3 / 4, 5 / 7], [9, 1, 9, 9], [4 / 3, 1 / 9, 1, 2], [7 / 5, 1 / 9, 1 / 2, 1]]),
-    #             }
-    #         }
-    #     }
-    # }
+    # 	Weights
+    # Cost	0.35
+    # Robustness	0.65
 
-    purchase_price = ComparisonMatrix('Purchase Price', numpy.matrix(
-        [[1, 7 / 5, 4 / 9, 4 / 5],
-         [5 / 7, 1, 6 / 7, 7 / 6],
-         [9 / 4, 7 / 6, 1, 3 / 2],
-         [5 / 4, 6 / 7, 2 / 3, 1]]))
+    # Cost	Hall Effect	Contact	Infrared
+    # Hall Effect	1.00	0.75	0.40
+    # Contact	1.33	1.00	1.50
+    # Infrared	2.50	0.66	1.00
 
-    fuel_cost = ComparisonMatrix('Fuel Cost', numpy.matrix(
-        [[1, 7 / 3, 9 / 5, 2],
-         [3 / 7, 1, 8 / 5, 8 / 5],
-         [5 / 9, 5 / 8, 1, 2],
-         [1 / 2, 5 / 8, 1 / 2, 1]]))
+    # Robustness	Hall Effect	Contact	Infrared
+    # Hall Effect	1.00	0.60	0.95
+    # Contact	1.66	1.00	1.50
+    # Infrared	1.05	0.66	1.00
 
-    maintenance_cost = ComparisonMatrix('Maintenance Cost', numpy.matrix(
-        [[1, 7 / 5, 4 / 3, 5 / 9],
-         [5 / 7, 1, 2, 6 / 5],
-         [3 / 4, 1 / 2, 1, 3 / 2],
-         [9 / 5, 5 / 6, 2 / 3, 1]]))
+    door_sensor_cost = ComparisonMatrix("Door Sensor Cost", numpy.matrix(
+        [[1, 0.75, 0.40],
+         [1.33, 1, 1.5],
+         [2.5, 0.66, 1]]))
+    door_sensor_robustness = ComparisonMatrix("Door Sensor Robustness", numpy.matrix(
+        [[1, 0.6, 0.95],
+         [1.66, 1, 1.5],
+         [1.05, 0.66, 1]]))
 
-    trunk_size = ComparisonMatrix('Trunk Size', numpy.matrix(
-        [[1, 6 / 5, 2 / 3, 5 / 2],
-         [5 / 6, 1, 5 / 9, 7 / 5],
-         [3 / 2, 9 / 5, 1, 1],
-         [2 / 5, 5 / 7, 1, 1]]))
+    door_sensor = ComparisonMatrix("Door Sensor", numpy.matrix(
+        [[1, 1.85],
+         [0.53, 1]]), subcriteria=[door_sensor_cost, door_sensor_robustness])
 
-    passenger_capacity = ComparisonMatrix('Passenger Capacity', numpy.matrix(
-        [[1, 9, 9, 3 / 8],
-         [1 / 9, 1, 2 / 3, 1 / 9],
-         [1 / 9, 3 / 2, 1, 1 / 9],
-         [8 / 3, 9, 9, 1]]))
+    print(door_sensor.get_consistency_str())
+    print(door_sensor.get_ranking_str())
 
-    safety = ComparisonMatrix('Safety', numpy.matrix(
-        [[1, 2 / 5, 1 / 9, 1 / 7],
-         [5 / 2, 1, 1 / 9, 1 / 4],
-         [9, 9, 1, 5],
-         [7, 4, 1 / 5, 1]]))
+    # Temperature Sensor Tables
+    #
+    # Cost	RTD	NTC Glass	NTC Bead
+    # RTD	1.00	2.50	3.00
+    # NTC Glass	0.40	1.00	1.20
+    # NTC Bead	0.33	0.83	1.00
+    #
+    # Robustness	RTD	NTC Glass	NTC Bead
+    # RTD	1.00	0.20	0.30
+    # NTC Glass	5.00	1.00	1.20
+    # NTC Bead	3.33	0.83	1.00
 
-    design = ComparisonMatrix('Design', numpy.matrix(
-        [[1, 1 / 9, 1 / 9, 1 / 9],
-         [9, 1, 5, 9 / 8],
-         [9, 1 / 5, 1, 7 / 9],
-         [9, 8 / 9, 9 / 7, 1]]))
+    temperature_sensor_cost = ComparisonMatrix("Temperature Sensor Cost", numpy.matrix(
+        [[1, 2.5, 3],
+         [0.4, 1, 1.2],
+         [0.33, 0.83, 1]]))
 
-    warranty = ComparisonMatrix('Warranty', numpy.matrix(
-        [[1, 9, 4 / 3, 7 / 5],
-         [1 / 9, 1, 1 / 9, 1 / 9],
-         [3 / 4, 9, 1, 1 / 2],
-         [5 / 7, 9, 2, 1]]))
+    temperature_sensor_robustness = ComparisonMatrix("Temperature Sensor Robustness", numpy.matrix(
+        [[1, 0.2, 0.3],
+         [5, 1, 1.2],
+         [3.33, 0.83, 1]]))
 
-    cost = ComparisonMatrix('Cost', numpy.matrix(
-        [[1, 7, 8],
-         [1 / 7, 1, 3],
-         [1 / 8, 1 / 3, 1]]), subcriteria=[purchase_price, fuel_cost, maintenance_cost])
+    temperature_sensor = ComparisonMatrix("Temperature Sensor", numpy.matrix(
+        [[1, 1.85],
+         [0.53, 1]]), subcriteria=[temperature_sensor_cost, temperature_sensor_robustness])
 
-    capacity = ComparisonMatrix('Capacity', numpy.matrix(
-        [[1, 3],
-         [1 / 3, 1]]), subcriteria=[passenger_capacity, trunk_size])
-
-    goal = ComparisonMatrix('Car', numpy.matrix(
-        [[1, 7 / 5, 5, 9 / 5, 8],
-         [5 / 7, 1, 9 / 5, 7 / 5, 5 / 4],
-         [1 / 5, 5 / 9, 1, 3 / 7, 3 / 4],
-         [5 / 9, 5 / 7, 7 / 3, 1, 7 / 9],
-         [1 / 8, 4 / 5, 4 / 3, 9 / 7, 1]]), subcriteria=[cost, safety, design, capacity, warranty])
-
-    print(goal)
-
-    print(goal.get_consistency_str())
-
-    print(goal.get_ranking_str())
+    print(temperature_sensor.get_consistency_str())
+    print(temperature_sensor.get_ranking_str())
